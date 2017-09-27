@@ -1,0 +1,63 @@
+# ==============================================
+# MTK Policy Rule
+# ============
+
+# Date : 2016/06/01
+# Operation: TEEI integration
+# Purpose: Microtrust ifaad service
+type ifaad, domain;
+type ifaad_exec, exec_type, file_type;
+type ifaad_service,service_manager_type;
+
+allow ifaad self:capability sys_module;
+allow ifaad teei_config_device:chr_file rw_file_perms;
+allow ifaad teei_client_device:chr_file create_file_perms;
+allow ifaad teei_vfs_device:chr_file rw_file_perms;
+allow ifaad teei_rpmb_device:chr_file rw_file_perms;
+allow ifaad teei_data_file:dir create_dir_perms;
+allow ifaad teei_data_file:file rw_file_perms;
+allow ifaad teei_data_file:file create_file_perms;
+allow ifaad self:capability dac_override;
+allow ifaad device:dir rw_dir_perms;
+allow ifaad cache_file:file rw_file_perms;
+
+#enable access android property
+allow ifaad property_socket:sock_file {read write};
+allow ifaad init:unix_stream_socket {connectto};
+allow ifaad soter_teei_prop:property_service {set};
+allow ifaad teei_vfs_device:chr_file rw_file_perms;
+allow ifaad teei_rpmb_device:chr_file rw_file_perms;
+
+#set up domain
+init_daemon_domain(ifaad)
+
+#for debug only
+allow ifaad kmsg_device:chr_file {open write};
+
+#define for mlsconstrain
+typeattribute teei_client_device mlstrustedobject;
+
+#allow ifaad save fingerprint data
+allow ifaad fingerprintd_data_file:dir { search write add_name };
+allow ifaad fingerprintd_data_file:file { create read write open };
+
+#allow ifaad read ut_keymaster data
+allow ifaad ut_keymaster_device:chr_file rw_file_perms;
+
+allow ifaad servicemanager:binder call;
+allow ifaad servicemanager:binder transfer;
+allow servicemanager ifaad:binder set_context_mgr;
+
+allow servicemanager ifaad:dir search;
+allow ifaad servicemanager:dir search;
+allow servicemanager ifaad:file read;
+allow ifaad servicemanager:file read;
+allow servicemanager ifaad:file open;
+allow ifaad servicemanager:file open;;
+allow servicemanager ifaad:process getattr;
+allow ifaad servicemanager:process getattr;
+
+allow ifaad ifaad_service:service_manager add;
+allow ifaad ifaad_service:service_manager find;
+allow untrusted_app ifaad_service:service_manager find;
+allow untrusted_app ifaad:binder call;
