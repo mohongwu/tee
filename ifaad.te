@@ -60,4 +60,4 @@ allow ifaad servicemanager:process getattr;
 allow ifaad ifaad_service:service_manager add;
 allow ifaad ifaad_service:service_manager find;
 allow untrusted_app ifaad_service:service_manager find;
-allow untrusted_app ifaad:binder call;
+#allow untrusted_app ifaad:binder call;
